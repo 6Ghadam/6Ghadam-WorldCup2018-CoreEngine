@@ -7,9 +7,16 @@
     "host": "localhost",
     "port": 27017,
     "url": "",
-    "maxRows": 2000,
     "database": "6GhadamFifaWC2018DB",
     "name": "mongoDs",
+    "maxRows": 2000,
     "connector": "mongodb"
+  },
+  "fileStorage": {
+    "name": "fileStorage",
+    "connector": "loopback-component-storage",
+    "provider": "filesystem",
+    "root": "./fileStorage",
+    "maxFileSize": "52428800"
   }
 }
