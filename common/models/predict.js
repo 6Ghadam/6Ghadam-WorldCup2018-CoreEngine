@@ -421,5 +421,38 @@ module.exports = function(predict) {
       type: 'object',
       root: true
     }
-  })
+	})
+	
+  predict.afterRemote('destroyById', function (ctx, modelInstance, next) {
+		var identifier = ctx.ctorArgs.id.toString()
+		var estimate = app.models.estimate
+		estimate.find({'where':{'predictId': identifier}}, function(estimateList) {
+			if (err)
+				return next(err)
+			if (estimateList.length == 0)
+				return next()
+			var counter = 0
+			for (var i = 0; i < estimateList.length; i++) {
+				var estimateInst = estimateList[i]
+				estimateInst.clientRel(function(err, clientInst) {
+					if (err)
+						return next(err)
+					var newChances = Number(clientInst.accountInfoModel.chances) + 1
+					clientInst.accountInfo.update({'chances': newChances}, function(err, result) {
+						if (err)
+							return next(err)
+						counter++
+						if (counter == estimateList.length) {
+							estimate.destroyAll({'predictId': identifier}, function(err, result) {
+								if (err)
+									return next(err)
+								return next()
+							})
+						}
+					})			
+				})
+			}
+		})
+	})
+
 }
