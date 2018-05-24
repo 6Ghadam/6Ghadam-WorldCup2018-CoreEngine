@@ -296,5 +296,45 @@ module.exports = function(exact) {
       type: 'object',
       root: true
     }
-  })
+	})
+	
+  exact.afterRemote('destroyById', function (ctx, modelInstance, next) {
+		var identifier = ctx.ctorArgs.id.toString()
+		var choice = app.models.choice
+		choice.find({'where':{'exactId': identifier}}, function(choiceList) {
+			if (err)
+				return next(err)
+			if (choiceList.length == 0)
+				return next()
+			var counter = 0
+			for (var i = 0; i < choiceList.length; i++) {
+				var choiceInst = choiceList[i]
+				choiceInst.clientRel(function(err, clientInst) {
+					if (err)
+						return next(err)
+					var totalCount = 0
+					if (choiceInst.firstOption.choice)
+						totalCount++
+					if (choiceInst.secondOption.choice)
+						totalCount++
+					if (choiceInst.thirdOption.choice)
+						totalCount++				
+					var newChances = Number(clientInst.accountInfoModel.chances) + totalCount
+					clientInst.accountInfo.update({'chances': newChances}, function(err, result) {
+						if (err)
+							return next(err)
+						counter++
+						if (counter == choiceList.length) {
+							choice.destroyAll({'exactId': identifier}, function(err, result) {
+								if (err)
+									return next(err)
+								return next()
+							})
+						}
+					})			
+				})
+			}
+		})
+	})
+
 }
