@@ -35,5 +35,73 @@
   "Role": {
     "dataSource": "mongoDs",
     "public": false
+  },
+  "client": {
+    "dataSource": "mongoDs",
+    "public": true
+  },
+  "referral": {
+    "dataSource": "mongoDs",
+    "public": true
+  },
+  "accountInfo": {
+    "dataSource": "mongoDs",
+    "public": true
+  },
+  "league": {
+    "dataSource": "mongoDs",
+    "public": true
+  },
+  "team": {
+    "dataSource": "mongoDs",
+    "public": true
+  },
+  "coach": {
+    "dataSource": "mongoDs",
+    "public": true
+  },
+  "player": {
+    "dataSource": "mongoDs",
+    "public": true
+  },
+  "transaction": {
+    "dataSource": "mongoDs",
+    "public": true
+  },
+  "container": {
+    "dataSource": "fileStorage",
+    "public": true
+  },
+  "predict": {
+    "dataSource": "mongoDs",
+    "public": true
+  },
+  "estimate": {
+    "dataSource": "mongoDs",
+    "public": true
+  },
+  "checkpoint": {
+    "dataSource": "mongoDs",
+    "public": true
+  },
+  "exact": {
+    "dataSource": "mongoDs",
+    "public": true
+  },
+  "choice": {
+    "dataSource": "mongoDs",
+    "public": true
+  },
+  "trophy": {
+    "dataSource": "mongoDs",
+    "public": true
+  },
+  "verification": {
+    "dataSource": "mongoDs",
+    "public": true
+  },
+  "package": {
+    "dataSource": "mongoDs",
+    "public": true
   }
 }
