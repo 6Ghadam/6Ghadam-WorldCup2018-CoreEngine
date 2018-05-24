@@ -29,13 +29,13 @@
     {
       "principalType": "ROLE",
       "principalId": "$everyone",
-      "permission": "ALLOW",
+      "permission": "DENY",
       "property": "download"
     },
     {
       "principalType": "ROLE",
       "principalId": "$everyone",
-      "permission": "ALLOW",
+      "permission": "DENY",
       "property": "uploadFile"
     },
     {

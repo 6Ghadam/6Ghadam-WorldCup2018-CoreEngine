@@ -222,7 +222,7 @@ module.exports = function(exact) {
 		})	
 	})
 
-	exact.beforeRemote('replaceById', function (ctx, modelInstance, next) {
+	exact.beforeRemote('updateById', function (ctx, modelInstance, next) {
 		if (ctx.args.data.answer !== '') {
 			if (ctx.args.data.status === statusConfig.working || ctx.args.data.status === statusConfig.closed) 
 				next()
@@ -233,7 +233,7 @@ module.exports = function(exact) {
 			next()
 	})
 
-  exact.afterRemote('replaceById', function (ctx, modelInstance, next) {
+  exact.afterRemote('updateById', function (ctx, modelInstance, next) {
 		if ((modelInstance.status === statusConfig.working || modelInstance.status === statusConfig.closed) && (modelInstance.answer && modelInstance.answer !== '')) {
 			var client = app.models.client
 			modelInstance.updateAttribute('status', statusConfig.finished, function(err, exactInstance) {

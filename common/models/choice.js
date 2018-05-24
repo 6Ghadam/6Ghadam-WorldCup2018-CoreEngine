@@ -98,7 +98,7 @@ module.exports = function(choice) {
 		})
 	})
 
-  choice.beforeRemote('replaceById', function (ctx, modelInstance, next) {
+  choice.beforeRemote('updateById', function (ctx, modelInstance, next) {
 		choice.findById(ctx.args.data.id.toString(), function(err, choiceInst) {
 			if (err)
 				return next(err)
@@ -241,7 +241,7 @@ module.exports = function(choice) {
 		})
 	})
 
-  choice.afterRemote('replaceById', function (ctx, modelInstance, next) {
+  choice.afterRemote('updateById', function (ctx, modelInstance, next) {
 		var client = app.models.client
 		var exact = app.models.exact
 		client.findById(modelInstance.clientId.toString(), function(err, clientInst) {

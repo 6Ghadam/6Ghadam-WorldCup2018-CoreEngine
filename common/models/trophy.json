@@ -34,18 +34,6 @@
       "principalType": "ROLE",
       "principalId": "admin",
       "permission": "ALLOW"
-    },
-    {
-      "principalType": "ROLE",
-      "principalId": "$everyone",
-      "permission": "ALLOW",
-      "property": "leagueRanking"
-    },
-    {
-      "principalType": "ROLE",
-      "principalId": "$everyone",
-      "permission": "ALLOW",
-      "property": "userStats"
     }
   ],
   "methods": {}

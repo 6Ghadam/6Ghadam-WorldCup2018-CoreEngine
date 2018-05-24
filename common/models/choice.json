@@ -69,7 +69,7 @@
       "principalType": "ROLE",
       "principalId": "$owner",
       "permission": "ALLOW",
-      "property": "replaceById"
+      "property": "updateById"
     },
     {
       "principalType": "ROLE",

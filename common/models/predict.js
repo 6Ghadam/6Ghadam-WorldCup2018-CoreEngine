@@ -357,7 +357,7 @@ module.exports = function(predict) {
 		}
 	})
 
-  predict.afterRemote('replaceById', function (ctx, modelInstance, next) {
+  predict.afterRemote('updateById', function (ctx, modelInstance, next) {
 		if ((modelInstance.status === statusConfig.working || modelInstance.status === statusConfig.closed) && (modelInstance.occurrence && modelInstance.occurrence != 0)) {
 			var client = app.models.client
 			modelInstance.updateAttribute('status', statusConfig.finished, function(err, predictInstance) {

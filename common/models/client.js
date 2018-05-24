@@ -279,7 +279,7 @@ module.exports = function(client) {
     return next()
   })
 
-  client.beforeRemote('replaceById', function (ctx, modelInstance, next) {
+  client.beforeRemote('updateById', function (ctx, modelInstance, next) {
     var whiteList = ['fullname']
     if (utility.inputChecker(ctx.args.data, whiteList))
       return next()
