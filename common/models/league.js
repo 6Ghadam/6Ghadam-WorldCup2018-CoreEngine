@@ -25,7 +25,7 @@ module.exports = function(league) {
 	})
 
 	league.afterRemote('updateById', function (ctx, modelInstance, next) {
-		var identifier = ctx.args.id.toString()
+		var identifier = modelInstance.id.toString()
 		var team = app.models.team
 		team.updateAll({'leagueId': identifier}, {'leagueName': modelInstance.name}, function(err, updatedList){
 			if (err)
@@ -44,7 +44,7 @@ module.exports = function(league) {
 		})
 	})
 
-	league.afterRemote('destroyById', function (ctx, modelInstance, next) {
+	league.afterRemote('deleteById', function (ctx, modelInstance, next) {
 		var identifier = ctx.ctorArgs.id.toString()
 		var team = app.models.team
 		team.destroyAll({'leagueId': identifier}, function(err, destroyedList){
@@ -65,6 +65,7 @@ module.exports = function(league) {
 	})
 
 	league.beforeRemote('prototype.__create__teams', function (ctx, modelInstance, next) {
+		ctx.args.data.leagueId = ctx.req.params.id.toString()
 		var requiredList = ['name', 'code', 'leagueId']
     if (!utility.requiredChecker(ctx.args.data, requiredList))
 			return next(new Error('Required Parameters'))
@@ -82,7 +83,7 @@ module.exports = function(league) {
 	})
 
 	league.afterRemote('prototype.__create__teams', function (ctx, modelInstance, next) {
-		league.findById(modelInstance.leagueId.toString(), function(leagueInst) {
+		league.findById(modelInstance.leagueId.toString(), function(err, leagueInst) {
 			if (err)
 				return next(err)
 			if (!leagueInst)
@@ -93,38 +94,16 @@ module.exports = function(league) {
 	})
 
 	league.beforeRemote('prototype.__updateById__teams', function (ctx, modelInstance, next) {
-		var requiredList = ['name', 'code', 'leagueId']
+		var requiredList = ['name', 'code']
     if (!utility.requiredChecker(ctx.args.data, requiredList))
 			return next(new Error('Required Parameters'))
-		var whiteList = ['name', 'code', 'leagueId']
+		var whiteList = ['name', 'code']
 		if (!utility.whiteChecker(ctx.args.data, whiteList))
 			return next(new Error('White Parameters'))
-		league.findById(ctx.args.data.leagueId.toString(), function(err, leagueModel) {
-			if (err)
-				return next(err)
-			if (!leagueModel)
-				return next(new Error('League Model Does not Exist'))
-			ctx.args.data.leagueName = leagueModel.name
-			return next()
-		})
+		return next()
 	})
 
-	league.afterRemote('prototype.__updateById__teams', function (ctx, modelInstance, next) {
-		var identifier = ctx.args.id.toString()
-		var coach = app.models.coach
-		coach.updateAll({'leagueId': identifier}, {'leagueName': modelInstance.name, 'leagueId': modelInstance.id.toString()}, function(err, updatedList){
-			if (err)
-				return next(err)
-			var player = app.models.player
-			player.updateAll({'leagueId': identifier}, {'leagueName': modelInstance.name, 'leagueId': modelInstance.id.toString()}, function(err, updatedList){
-				if (err)
-					return next(err)
-				return next()
-			})			
-		})
-	})
-
-	league.afterRemote('prototype.__destroyById__teams', function (ctx, modelInstance, next) {
+	league.afterRemote('prototype.__deleteById__teams', function (ctx, modelInstance, next) {
 		var identifier = ctx.ctorArgs.id.toString()
 		var coach = app.models.coach
 		coach.destroyAll({'teamId': identifier}, function(err, destroyedList){
@@ -140,6 +119,7 @@ module.exports = function(league) {
 	})
 
 	league.beforeRemote('prototype.__create__coaches', function (ctx, modelInstance, next) {
+		ctx.args.data.leagueId = ctx.req.params.id.toString()
 		var requiredList = ['name', 'leagueId', 'teamId']
     if (!utility.requiredChecker(ctx.args.data, requiredList))
 			return next(new Error('Required Parameters'))
@@ -166,7 +146,7 @@ module.exports = function(league) {
 		})
 	})
 
-	league.beforeRemote('prototype.__create__coaches', function (ctx, modelInstance, next) {
+	league.afterRemote('prototype.__create__coaches', function (ctx, modelInstance, next) {
 		league.findById(modelInstance.leagueId.toString(), function(err, leagueInst) {
 			if (err)
 				return next(err)
@@ -186,6 +166,17 @@ module.exports = function(league) {
 	})
 
 	league.beforeRemote('prototype.__updateById__coaches', function (ctx, modelInstance, next) {
+		var requiredList = ['name', 'teamId']
+    if (!utility.requiredChecker(ctx.args.data, requiredList))
+			return next(new Error('Required Parameters'))
+		var whiteList = ['name', 'teamId']
+		if (!utility.whiteChecker(ctx.args.data, whiteList))
+			return next(new Error('White Parameters'))
+		return next()
+	})
+
+	league.beforeRemote('prototype.__create__players', function (ctx, modelInstance, next) {
+		ctx.args.data.leagueId = ctx.req.params.id.toString()
 		var requiredList = ['name', 'leagueId', 'teamId']
     if (!utility.requiredChecker(ctx.args.data, requiredList))
 			return next(new Error('Required Parameters'))
@@ -212,34 +203,7 @@ module.exports = function(league) {
 		})
 	})
 
-	league.beforeRemote('prototype.__create__players', function (ctx, modelInstance, next) {
-		var requiredList = ['name', 'leagueId', 'teamId']
-    if (!utility.requiredChecker(ctx.args.data, requiredList))
-			return next(new Error('Required Parameters'))
-		var whiteList = ['name', 'leagueId', 'teamId']
-		if (!utility.whiteChecker(ctx.args.data, whiteList))
-			return next(new Error('White Parameters'))
-		league.findById(ctx.args.data.leagueId.toString(), function(err, leagueModel) {
-			if (err)
-				return next(err)
-			if (!leagueModel)
-				return next(new Error('League Model Does not Exist'))
-			ctx.args.data.leagueName = leagueModel.name
-			var team = app.models.team
-			team.findById(ctx.args.data.teamId.toString(), function(err, teamModel) {
-				if (err)
-					return next(err)
-				if (!teamModel)
-					return next(new Error('Team Model Does not Exist'))
-				if (leagueModel.id.toString() !== teamModel.leagueId.toString())
-					return next(new Error('Team Does not Belong to This League'))
-				ctx.args.data.teamName = teamModel.name
-				return next()
-			})
-		})
-	})
-
-	league.beforeRemote('prototype.__create__players', function (ctx, modelInstance, next) {
+	league.afterRemote('prototype.__create__players', function (ctx, modelInstance, next) {
 		league.findById(modelInstance.leagueId.toString(), function(err, leagueInst) {
 			if (err)
 				return next(err)
@@ -259,30 +223,13 @@ module.exports = function(league) {
 	})
 
 	league.beforeRemote('prototype.__updateById__players', function (ctx, modelInstance, next) {
-		var requiredList = ['name', 'leagueId', 'teamId']
+		var requiredList = ['name', 'teamId']
     if (!utility.requiredChecker(ctx.args.data, requiredList))
 			return next(new Error('Required Parameters'))
-		var whiteList = ['name', 'leagueId', 'teamId']
+		var whiteList = ['name', 'teamId']
 		if (!utility.whiteChecker(ctx.args.data, whiteList))
 			return next(new Error('White Parameters'))
-		league.findById(ctx.args.data.leagueId.toString(), function(err, leagueModel) {
-			if (err)
-				return next(err)
-			if (!leagueModel)
-				return next(new Error('League Model Does not Exist'))
-			ctx.args.data.leagueName = leagueModel.name
-			var team = app.models.team
-			team.findById(ctx.args.data.teamId.toString(), function(err, teamModel) {
-				if (err)
-					return next(err)
-				if (!teamModel)
-					return next(new Error('Team Model Does not Exist'))
-				if (leagueModel.id.toString() !== teamModel.leagueId.toString())
-					return next(new Error('Team Does not Belong to This League'))
-				ctx.args.data.teamName = teamModel.name
-				return next()
-			})
-		})
+		return next()
 	})
 
 }
