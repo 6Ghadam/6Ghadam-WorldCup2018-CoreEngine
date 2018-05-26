@@ -7,7 +7,7 @@
     "host": "localhost",
     "port": 27017,
     "url": "",
-    "database": "6GhadamFifaWC2018DB",
+    "database": "6GhadamFifaWorldCup2018DB",
     "name": "mongoDs",
     "maxRows": 2000,
     "connector": "mongodb"
