@@ -104,6 +104,18 @@
   },
   "acls": [
     {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "founder",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW"
+    },
+    {
       "principalType": "ROLE",
       "principalId": "$authenticated",
       "permission": "ALLOW",
@@ -168,18 +180,6 @@
       "principalId": "$everyone",
       "permission": "ALLOW",
       "property": "changePhone"
-    },
-    {
-      "accessType": "*",
-      "principalType": "ROLE",
-      "principalId": "founder",
-      "permission": "ALLOW"
-    },
-    {
-      "accessType": "*",
-      "principalType": "ROLE",
-      "principalId": "admin",
-      "permission": "ALLOW"
     }
   ],
   "methods": {}
