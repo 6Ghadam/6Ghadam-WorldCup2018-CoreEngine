@@ -29,11 +29,12 @@ module.exports = function (app) {
       time: time,
       status: status,
       emailVerified: true,
-      phoneNumber: '09120001123'
+      phoneNumber: '09120001122'
     }
   ]
 
   function createRoles(users) {
+    console.log('creaingRoles')
     var role1 = {
       name: 'founder'
     }
@@ -66,17 +67,11 @@ module.exports = function (app) {
     })
   }
 
-  User.create(users, function (err, users) {
-    if (err) {
-      User.find({'where': {'phoneNumber': '09120001122'}}, function(err, result) {
-        if (err)
-          throw err
-        createRoles(result)
-      })
-    }
-    else {
-      createRoles(users)
-    }
+  User.find({'where': {'phoneNumber': '09120001122'}}, function(err, result) {
+    if (err)
+      throw err
+    if (!result)
+      createRoles(result)
   })
 
 }
