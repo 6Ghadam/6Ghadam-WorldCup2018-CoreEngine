@@ -76,7 +76,6 @@ module.exports = function(container) {
         var directory = path.resolve(__dirname + '/../../fileStorage/')
         var dir = directory + '/' + data.id.toString() 
         var fp = directory + '/' + data.id.toString() + '/profile.png'
-        console.log(dir)
         fse.ensureDir(dir, err => {
           if (!err) {
             container.uploadSampleProImage(data.id.toString(), function(err, result) {
