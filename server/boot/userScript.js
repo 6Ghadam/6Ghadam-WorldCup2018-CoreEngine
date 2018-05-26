@@ -70,11 +70,11 @@ module.exports = function (app) {
   User.find({'where': {'phoneNumber': '09120001122'}}, function(err, result) {
     if (err)
       throw err
-    if (!result) {
+    if (result.length == 0) {
       User.create(users, function (err, users) {
         if (err)
           throw err 
-        createRoles(result)
+        createRoles(users)
       })
     }
   })
