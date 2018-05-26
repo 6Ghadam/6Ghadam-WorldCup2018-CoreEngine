@@ -68,7 +68,7 @@ module.exports = function(package) {
 
   package.beforeRemote('create', function (ctx, modelInstance, next) {
     var whiteList = ['name', 'beginningTime', 'endingTime', 'chances', 'offer', 'explanation', 'price']
-    if (!utility.inputChecker(ctx.args.data, whiteList))
+    if (!utility.whiteChecker(ctx.args.data, whiteList))
       return next(new Error('White List Error! Allowed Parameters: ' + whiteList.toString()))
 		var time = utility.getUnixTimeStamp()
 		if (ctx.args.data.beginningTime && ctx.args.data.endingTime)
@@ -80,7 +80,7 @@ module.exports = function(package) {
 
   package.beforeRemote('udpateById', function (ctx, modelInstance, next) {
     var whiteList = ['name', 'beginningTime', 'endingTime', 'chances', 'offer', 'explanation', 'status', 'price']
-    if (!utility.inputChecker(ctx.args.data, whiteList))
+    if (!utility.whiteChecker(ctx.args.data, whiteList))
       return next(new Error('White List Error! Allowed Parameters: ' + whiteList.toString()))
 		var time = utility.getUnixTimeStamp() - 300000
 		if ((ctx.args.data.beginningTime) && !(Number(ctx.args.data.beginningTime) >= time))

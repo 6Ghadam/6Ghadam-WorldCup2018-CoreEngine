@@ -147,7 +147,7 @@ module.exports = function(client) {
       if (result == 2)
         return next(new Error('خطا! اکانت شما در حال حاضر احراز هویت شده‌است'))
       var whiteList = ['email', 'username', 'password', 'time', 'phoneNumber', 'fullname', 'referrer']
-      if (!utility.inputChecker(ctx.args.data, whiteList))
+      if (!utility.whiteChecker(ctx.args.data, whiteList))
         return next(new Error('White List Error! Allowed Parameters: ' + whiteList.toString()))
       else {
         function done() {
@@ -281,7 +281,7 @@ module.exports = function(client) {
 
   client.beforeRemote('updateById', function (ctx, modelInstance, next) {
     var whiteList = ['fullname']
-    if (utility.inputChecker(ctx.args.data, whiteList))
+    if (utility.whiteChecker(ctx.args.data, whiteList))
       return next()
     else
       return next(new Error('White List Error! Allowed Parameters: ' + whiteList.toString()))
