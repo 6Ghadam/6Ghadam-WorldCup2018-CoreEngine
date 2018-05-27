@@ -496,7 +496,7 @@ module.exports = function(client) {
 				'trophyModel': false,
 				'teamId': false,
 				'referralModel': false,
-				'checkpointModel': false,
+				'checkpointModel': true,
 				'emps': false,
 				'status': false,
 				'profilePath': false,
