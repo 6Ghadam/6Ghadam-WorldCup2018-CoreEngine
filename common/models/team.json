@@ -75,6 +75,12 @@
       "principalId": "$everyone",
       "permission": "ALLOW",
       "property": "selectFavorite"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "__get__clients"
     }
   ],
   "methods": {}
